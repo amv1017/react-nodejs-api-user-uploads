@@ -19,7 +19,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use('/uploads', express.static('uploads'))
 
-app.get('/api/users', expressAsyncHandler(async (req, res) => {
+app.get(
+  '/api/users',
+  expressAsyncHandler(async (req, res) => {
     const users = await UserSchema.find({})
     res.status(200).json(users)
   })

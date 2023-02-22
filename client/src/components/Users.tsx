@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react'
-
-import { IUser } from './IUser'
-
-const API_URL = import.meta.env.VITE_API_URL
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { getUsers } from '../reducers/userReducer'
 
 const Users = () => {
-  const [users, setUsers] = useState<IUser[]>([])
+  const dispatch = useDispatch()
+
+  const users = useSelector((state: any) => state.users)
 
   useEffect(() => {
-    (async () => {
-      const res = await fetch(API_URL + '/users')
-      const data = await res.json()
-      setUsers(data)
-    })()
+    dispatch(getUsers())
   }, [])
+
+  if (!users) {
+    return <div>No Users</div>
+  }
 
   return (
     <ul>
-      {users.map((user: IUser) => (
-        <li>name: {user.name}</li>
+      {(users || []).map((user: any) => (
+        <li key={user.email}>{user.name}</li>
       ))}
     </ul>
   )
