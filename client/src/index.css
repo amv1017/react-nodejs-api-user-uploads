@@ -39,3 +39,13 @@
 button.nav {
   border: none;
 }
+
+.register {
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+}
+
+.register input {
+  margin: 10px;
+}

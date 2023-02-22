@@ -30,6 +30,23 @@ export const setRegisterMode = (payload: boolean): any => {
   }
 }
 
+export const registerUser = (payload: any): any => {
+  return async (dispatch: any) => {
+    dispatch({ type: 'REGISTER_USER' })
+
+    const response = await axios.post(API_URL + '/users', payload)
+
+    console.log('response: ',response)
+    if (response) {
+      dispatch({ type: 'GET_USERS_COMPLETED', payload: response.data })
+    }
+    if (!response) {
+      dispatch({ type: 'GET_USERS_FAILED' })
+    }
+
+  }
+}
+
 const userReducer = (state = initialState, action: any): any => {
   if (action.type === 'GET_USERS') {
     return {
@@ -54,6 +71,12 @@ const userReducer = (state = initialState, action: any): any => {
   if (action.type === 'SET_REGISTER_MODE') {
     return {
       isRegisterMode: action.payload,
+    }
+  }
+
+  if (action.type === 'REGISTER_USER') {
+    return {
+      isLoading: true,
     }
   }
 
