@@ -6,3 +6,9 @@
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
 }
+
+.navbar {
+  position: sticky;
+  background: red;
+  display: flex;
+}
