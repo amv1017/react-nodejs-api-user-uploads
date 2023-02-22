@@ -1,0 +1,13 @@
+{
+  "name": "react-nodejs-api-user-uploads",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "cd client && yarn && cd ../server && yarn && yarn db",
+    "server": "yarn --cwd server dev",
+    "client": "yarn --cwd client dev",
+    "start": "concurrently \"yarn server\" \"yarn client\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
