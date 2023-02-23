@@ -36,7 +36,24 @@ export const registerUser = (payload: any): any => {
 
     const response = await axios.post(API_URL + '/users', payload)
 
-    console.log('response: ',response)
+    console.log('registerUser response: ', response)
+    if (response) {
+      dispatch({ type: 'GET_USERS_COMPLETED', payload: response.data })
+    }
+    if (!response) {
+      dispatch({ type: 'GET_USERS_FAILED' })
+    }
+  }
+}
+
+export const loginUser = (payload: any): any => {
+  console.log('PAYLOAD : ',payload)
+  return async (dispatch: any) => {
+    dispatch({ type: 'LOGIN_USER' })
+
+    const response = await axios.post(API_URL + '/login', payload)
+
+    console.log('loginUser response: ', response)
     if (response) {
       dispatch({ type: 'GET_USERS_COMPLETED', payload: response.data })
     }
@@ -75,6 +92,12 @@ const userReducer = (state = initialState, action: any): any => {
   }
 
   if (action.type === 'REGISTER_USER') {
+    return {
+      isLoading: true,
+    }
+  }
+
+  if (action.type === 'LOGIN_USER') {
     return {
       isLoading: true,
     }

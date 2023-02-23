@@ -6,5 +6,4 @@ yarn.lock*
 package-lock.json*
 
 client/dist
-server/db.json
 server/uploads
