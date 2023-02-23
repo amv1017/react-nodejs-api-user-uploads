@@ -9,13 +9,15 @@ export const getAllUsers = async (req: any, res: any) => {
 // ------------------------------------------------------------
 
 export const registerUser = async (req: any, res: any) => {
-  const { name, email, password } = req.body
+  const { name, email, password, sex, birthday } = req.body
   const { path: image } = req.file
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !sex || !birthday || !image) {
     res.status(400)
     throw new Error('No user data')
   }
+
+  // console.log('REQUEST.BODY : ', req.body)
 
   const userExists = await UserSchema.findOne({ email })
   if (userExists) {
@@ -28,6 +30,8 @@ export const registerUser = async (req: any, res: any) => {
     email,
     password,
     image,
+    birthday,
+    sex,
   })
 
   if (user) {
@@ -36,6 +40,8 @@ export const registerUser = async (req: any, res: any) => {
       name: user.name,
       email: user.email,
       user: user.image,
+      sex: user.sex,
+      birthday: user.birthday,
     })
   } else {
     res.status(400)

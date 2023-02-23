@@ -4,9 +4,30 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '../.env' })
 
 const data = [
-  { name: 'james', email: 'james@mail.com', password: '1234' },
-  { name: 'frank', email: 'frank@mail.com', password: '5678' },
-  { name: 'amily', email: 'amily@mail.com', password: '90ab' },
+  {
+    name: 'james',
+    email: 'james@mail.com',
+    password: '1234',
+    image: 'uploads\\james.jpg',
+    sex: 'Мужской',
+    birthday: new Date('1996-04-05'),
+  },
+  {
+    name: 'frank',
+    email: 'frank@mail.com',
+    password: '5678',
+    image: 'uploads\\frank.jpg',
+    sex: 'Мужской',
+    birthday: new Date('1985-02-03'),
+  },
+  {
+    name: 'amily',
+    email: 'amily@mail.com',
+    password: '90ab',
+    image: 'uploads\\amily.jpg',
+    sex: 'Женский',
+    birthday: new Date('1993-01-27'),
+  },
 ]
 
 const write = async () => {

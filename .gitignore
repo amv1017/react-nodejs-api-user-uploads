@@ -6,4 +6,6 @@ yarn.lock*
 package-lock.json*
 
 client/dist
-server/uploads
+
+server/uploads/*
+!server/uploads/*.jpg*

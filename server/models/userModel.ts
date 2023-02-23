@@ -6,10 +6,12 @@ const userSchema = new mongoose.Schema(
     email: String,
     password: String,
     image: String,
+    sex: String,
+    birthday: Date,
   },
-  {
-    timestamps: true,
-  }
+  // {
+  //   timestamps: true,
+  // }
 )
 
 const User = mongoose.model('users', userSchema)

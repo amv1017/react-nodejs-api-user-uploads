@@ -48,6 +48,12 @@ export const registerUser = (payload: any): any => {
   }
 }
 
+export const editUser = (payload: any): any => {
+  return async (dispatch: any) => {
+    dispatch({ type: 'EDIT_USER' })
+  }
+}
+
 export const loginUser = (payload: any): any => {
   return async (dispatch: any) => {
     dispatch({ type: LOGIN_USER })

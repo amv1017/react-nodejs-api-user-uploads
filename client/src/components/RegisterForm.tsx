@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { registerUser } from '../reducers/userReducer'
+import { _CONST_MALE, _CONST_FEMALE } from '../constants'
 
 const RegisterForm = () => {
   const dispatch = useDispatch()
@@ -10,9 +11,11 @@ const RegisterForm = () => {
     email: '',
     password: '',
     image: new File([], ''),
+    birthday: '',
+    sex: _CONST_MALE,
   })
 
-  const { name, email, password, image } = data
+  const { name, email, password, image, sex, birthday } = data
 
   const onChange = (e: any) => {
     setData({
@@ -29,9 +32,15 @@ const RegisterForm = () => {
     formData.append('email', email)
     formData.append('password', password)
     formData.append('image', image)
+    formData.append('sex', sex)
+    formData.append('birthday', birthday)
 
     dispatch(registerUser(formData))
   }
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
 
   return (
     <form className="register" onSubmit={onSubmit}>
@@ -56,6 +65,13 @@ const RegisterForm = () => {
         onChange={onChange}
         placeholder="Введите пароль"
       />
+      <input type="date" value={birthday} name="birthday" onChange={onChange} />
+
+      <select onChange={(e) => setData({ ...data, sex: e.target.value })}>
+        <option>{_CONST_MALE}</option>
+        <option>{_CONST_FEMALE}</option>
+      </select>
+
       <input
         multiple
         onChange={(e: any) =>
