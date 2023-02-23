@@ -5,18 +5,19 @@ import usersvg from '../assets/user.svg'
 import logoutsvg from '../assets/logout.svg'
 import loginsvg from '../assets/login.svg'
 import { _ROUTE_ACCOUNT, _ROUTE_PEOPLE } from '../routes'
-import { getTokenFromLocalStorage } from '../util'
+import { getLocalData } from '../util'
 import ActionButton from './ActionButton'
 import { useDispatch, useSelector } from 'react-redux'
-import { setRegisterMode } from '../reducers/userReducer'
+import { logoutUser, setRegisterMode } from '../reducers/userReducer'
 
 const NavBar = () => {
-  const token = getTokenFromLocalStorage()
+  const localData = getLocalData()
+  const userData = useSelector((state: any) => state.userData)
 
   const dispatch = useDispatch()
   return (
     <div className="navbar">
-      {token ? (
+      {(localData || userData) ? (
         <>
           <NavButton
             src={editsvg}
@@ -24,7 +25,12 @@ const NavBar = () => {
             to={_ROUTE_ACCOUNT}
           />
           <NavButton src={userssvg} text="Пользователи" to={_ROUTE_PEOPLE} />
-          <NavButton src={logoutsvg} text="Выход" to={'/'} />
+          <NavButton
+            src={logoutsvg}
+            text="Выход"
+            to={'/'}
+            onClick={() => dispatch(logoutUser())}
+          />
         </>
       ) : (
         <>

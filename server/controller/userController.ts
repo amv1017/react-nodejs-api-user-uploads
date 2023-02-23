@@ -46,22 +46,17 @@ export const registerUser = async (req: any, res: any) => {
 // ------------------------------------------------------------
 
 export const loginUser = async (req: any, res: any) => {
-  const {email, password} = req.body
-  const user = await UserSchema.findOne({email})
-  console.log('REQUEST:',req.body)
+  const { email, password } = req.body
+  const user = await UserSchema.findOne({ email })
 
   if (user && password === user.password) {
-    console.log('USER : ',user)
-    const {password, ...data} = user
+    const id = user.id
     res.status(200).json({
-      ...data,
-      token: generateToken(user.id)
+      id,
+      token: generateToken(id),
     })
   } else {
     res.status(400)
     throw new Error('Incorrect email or password')
   }
-
 }
-
-

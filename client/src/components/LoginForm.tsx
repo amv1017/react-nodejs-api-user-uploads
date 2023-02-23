@@ -1,9 +1,15 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
+import { getLocalData, setLocalData } from '../util'
 
-const RegisterForm = () => {
+const LoginForm = () => {
+  const userData = useSelector((state: any) => state.userData)
+  
+
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [data, setData] = useState({
     email: '',
@@ -25,8 +31,16 @@ const RegisterForm = () => {
     dispatch(loginUser({ email, password }))
   }
 
+  useEffect(() => {
+    if (userData) {
+      setLocalData(userData)
+      navigate('/account')
+    }
+  }, [userData])
+
   return (
     <form onSubmit={onSubmit}>
+      <h1>Вход</h1>
       <input
         type="email"
         name="email"
@@ -47,4 +61,4 @@ const RegisterForm = () => {
   )
 }
 
-export default RegisterForm
+export default LoginForm

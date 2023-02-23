@@ -1,12 +1,15 @@
 // @ts-ignore
-const STORAGE_ITEM_TOKEN = 'amv1017-react-nodejs-api-user-uploads-token'
+const STORAGE_DATA_KEY = 'amv1017-react-nodejs-api-user-uploads-userid-token'
 
 // @ts-ignore
-export const getTokenFromLocalStorage = () =>
+export const getLocalData = () =>
   // @ts-ignore
-  JSON.parse(window.localStorage.getItem(STORAGE_ITEM_TOKEN))
+  JSON.parse(window.localStorage.getItem(STORAGE_DATA_KEY))
 
-export const setTokenToLocalStorage = (value: any) =>
+export const setLocalData = (value: any) =>
   JSON.stringify(
-    window.localStorage.setItem(STORAGE_ITEM_TOKEN, JSON.stringify(value))
+    window.localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(value))
   )
+
+export const removeLocalData = () =>
+  window.localStorage.removeItem(STORAGE_DATA_KEY)

@@ -4,7 +4,11 @@ import dotenv from 'dotenv'
 import multer from 'multer'
 import expressAsyncHandler from 'express-async-handler'
 import connectDB from './db/db'
-import { getAllUsers, loginUser, registerUser } from './controller/userController'
+import {
+  getAllUsers,
+  loginUser,
+  registerUser,
+} from './controller/userController'
 
 dotenv.config({ path: '../.env' })
 

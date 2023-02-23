@@ -1,16 +1,19 @@
 import axios from 'axios'
+import { removeLocalData, setLocalData } from '../util'
 
 const API_URL = import.meta.env.VITE_API_URL
 
-const initialState = {
-  isLoading: false,
-  users: [],
-  isRegisterMode: false,
-}
+const GET_USERS = 'GET_USERS'
+const REGISTER_USER = 'REGISTER_USER'
+const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
+const REGISTER_FAILED = 'REGISTER_FAILED'
+const LOGIN_USER = 'LOGIN_USER'
+const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+const LOGIN_FAILED = 'LOGIN_FAILED'
 
 export const getUsers = (): any => {
   return async (dispatch: any) => {
-    dispatch({ type: 'GET_USERS' })
+    dispatch({ type: GET_USERS })
     const response = await axios.get(API_URL + '/users')
     if (response) {
       dispatch({ type: 'GET_USERS_COMPLETED', payload: response.data })
@@ -36,7 +39,6 @@ export const registerUser = (payload: any): any => {
 
     const response = await axios.post(API_URL + '/users', payload)
 
-    console.log('registerUser response: ', response)
     if (response) {
       dispatch({ type: 'GET_USERS_COMPLETED', payload: response.data })
     }
@@ -47,25 +49,43 @@ export const registerUser = (payload: any): any => {
 }
 
 export const loginUser = (payload: any): any => {
-  console.log('PAYLOAD : ',payload)
   return async (dispatch: any) => {
-    dispatch({ type: 'LOGIN_USER' })
+    dispatch({ type: LOGIN_USER })
 
-    const response = await axios.post(API_URL + '/login', payload)
+    const res = await axios.post(API_URL + '/login', payload)
 
-    console.log('loginUser response: ', response)
-    if (response) {
-      dispatch({ type: 'GET_USERS_COMPLETED', payload: response.data })
+    if (res.status === 200) {
+      dispatch({ type: LOGIN_SUCCESS, payload: res.data })
+    } else {
+      dispatch({ type: LOGIN_FAILED, payload: res.data })
     }
-    if (!response) {
-      dispatch({ type: 'GET_USERS_FAILED' })
-    }
-
   }
 }
 
-const userReducer = (state = initialState, action: any): any => {
-  if (action.type === 'GET_USERS') {
+export const logoutUser = (): any => {
+  removeLocalData()
+}
+
+const userReducer = (
+  state = {
+    isLoading: false,
+    isError: false,
+    users: [],
+    isRegisterMode: false,
+    userData: null,
+  },
+  action: any
+): any => {
+  if (action.type === LOGIN_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      isError: false,
+      userData: action.payload,
+    }
+  }
+
+  if (action.type === GET_USERS) {
     return {
       isLoading: true,
     }
