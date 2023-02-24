@@ -15,16 +15,20 @@ const LOGIN_USER = 'LOGIN_USER'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGIN_FAILED = 'LOGIN_FAILED'
 
+const EDIT_PROFILE = 'EDIT_PROFILE'
+const EDIT_SUCCESS = 'EDIT_SUCCESS'
+const EDIT_FAILED = 'EDIT_FAILED'
+
 const SET_REGISTER_MODE = 'SET_REGISTER_MODE'
 
 export const getUsers = (): any => {
   return async (dispatch: any) => {
     dispatch({ type: GET_USERS })
-    const response = await axios.get(API_URL + '/users')
-    if (response) {
-      dispatch({ type: GET_USERS_SUCCESS, payload: response.data })
+    const res = await axios.get(API_URL + '/users')
+    if (res) {
+      dispatch({ type: GET_USERS_SUCCESS, payload: res.data })
     }
-    if (!response) {
+    if (!res) {
       dispatch({ type: GET_USERS_FAILED })
     }
   }
@@ -33,7 +37,7 @@ export const getUsers = (): any => {
 export const setRegisterMode = (payload: boolean): any => {
   return (dispatch: any) => {
     dispatch({
-      type: 'SET_REGISTER_MODE',
+      type: SET_REGISTER_MODE,
       payload,
     })
   }
@@ -56,11 +60,18 @@ export const registerUser = (payload: any): any => {
 
 export const editProfile = (payload: any): any => {
   return async (dispatch: any) => {
-    dispatch({ type: 'EDIT_PROFILE' })
+    dispatch({ type: EDIT_PROFILE })
 
     const { data, id } = payload
 
     const res = await axios.put(API_URL + `/users/${id}`, data)
+
+    if (res) {
+      dispatch({ type: EDIT_SUCCESS, payload: res.data })
+    }
+    if (!res) {
+      dispatch({ type: EDIT_FAILED })
+    }
   }
 }
 
@@ -95,14 +106,15 @@ const userReducer = (
   switch (action.type) {
     case LOGIN_USER:
     case REGISTER_USER:
-    case GET_USERS: {
+    case GET_USERS:
+    case EDIT_PROFILE: {
       return {
+        ...state,
         isLoading: true,
       }
     }
 
     case LOGIN_SUCCESS:
-    case REGISTER_SUCCESS:
       return {
         ...state,
         isLoading: false,
@@ -110,17 +122,30 @@ const userReducer = (
         userData: action.payload,
       }
 
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isRegisterMode: false,
+      }
+
+    case EDIT_SUCCESS: {
+      return { ...state, isLoading: false, isError: false }
+    }
+
     case LOGIN_FAILED:
     case REGISTER_FAILED:
+    case EDIT_FAILED:
       return {
         ...state,
         isLoading: false,
         isError: true,
-        userData: null,
       }
 
     case GET_USERS_SUCCESS: {
       return {
+        ...state,
         isLoading: false,
         isError: false,
         users: action.payload,
@@ -129,6 +154,7 @@ const userReducer = (
 
     case GET_USERS_FAILED: {
       return {
+        ...state,
         isLoading: false,
         isError: true,
         users: [],
@@ -137,6 +163,7 @@ const userReducer = (
 
     case SET_REGISTER_MODE: {
       return {
+        ...state,
         isRegisterMode: action.payload,
       }
     }

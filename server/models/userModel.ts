@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     image: String,
     sex: String,
     birthday: Date,
-  },
+  }
   // {
   //   timestamps: true,
   // }

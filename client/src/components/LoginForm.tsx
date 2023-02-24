@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
-import { getLocalData, setLocalData } from '../util'
+import { setLocalData } from '../util'
+import Spinner from './Spinner'
 
 const LoginForm = () => {
   const userData = useSelector((state: any) => state.userData)
+  const isLoading = useSelector((state: any) => state.isLoading)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -37,9 +39,13 @@ const LoginForm = () => {
     }
   }, [userData])
 
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
-    <form onSubmit={onSubmit}>
-      <h1>Вход</h1>
+    <form onSubmit={onSubmit} className="forms">
+      <h3>Вход</h3>
       <input
         type="email"
         name="email"
@@ -54,8 +60,9 @@ const LoginForm = () => {
         onChange={onChange}
         placeholder="Введите пароль"
       />
-
-      <button onClick={onSubmit}>Войти</button>
+      <button className="auth" onClick={onSubmit}>
+        Войти
+      </button>
     </form>
   )
 }

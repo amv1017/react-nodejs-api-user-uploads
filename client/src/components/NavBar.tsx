@@ -1,3 +1,4 @@
+import React from 'react'
 import NavButton from './NavButton'
 import editsvg from '../assets/edit.svg'
 import userssvg from '../assets/users.svg'
@@ -17,7 +18,7 @@ const NavBar = () => {
   const dispatch = useDispatch()
   return (
     <div className="navbar">
-      {(localData || userData) ? (
+      {localData || userData ? (
         <>
           <NavButton
             src={editsvg}

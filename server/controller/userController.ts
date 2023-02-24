@@ -3,7 +3,15 @@ import { generateToken } from './util'
 
 export const getAllUsers = async (req: any, res: any) => {
   const users = await UserSchema.find({})
-  res.status(200).json(users)
+
+  const result = users.map(({ id, name, image, birthday }) => ({
+    id,
+    name,
+    image,
+    birthday,
+  }))
+
+  res.status(200).json(result)
 }
 
 export const registerUser = async (req: any, res: any) => {

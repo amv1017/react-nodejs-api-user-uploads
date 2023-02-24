@@ -5,7 +5,7 @@ const NavButton = ({
   text,
   src,
   to,
-  onClick
+  onClick,
 }: {
   text: string
   src: string

@@ -13,3 +13,8 @@ export const setLocalData = (value: any) =>
 
 export const removeLocalData = () =>
   window.localStorage.removeItem(STORAGE_DATA_KEY)
+
+export const getAge = (bday: string): string =>
+  `${Math.floor(
+    (+new Date() - Date.parse(bday)) / (365 * 24 * 60 * 60 * 1000)
+  )} лет`

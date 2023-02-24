@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { registerUser } from '../reducers/userReducer'
 import { _CONST_MALE, _CONST_FEMALE } from '../constants'
+import Spinner from './Spinner'
 
 const RegisterForm = () => {
   const dispatch = useDispatch()
+  const isLoading = useSelector((state: any) => state.isLoading)
 
   const [data, setData] = useState({
     name: '',
@@ -13,9 +15,10 @@ const RegisterForm = () => {
     image: new File([], ''),
     birthday: '',
     sex: _CONST_MALE,
+    confirm_password: '',
   })
 
-  const { name, email, password, image, sex, birthday } = data
+  const { name, email, password, image, sex, birthday, confirm_password } = data
 
   const onChange = (e: any) => {
     setData({
@@ -26,6 +29,11 @@ const RegisterForm = () => {
 
   const onSubmit = (e: any) => {
     e.preventDefault()
+
+    if (password !== confirm_password) {
+      alert('Пароли не совпадают!')
+      return
+    }
 
     const formData = new FormData()
     formData.append('name', name)
@@ -38,12 +46,13 @@ const RegisterForm = () => {
     dispatch(registerUser(formData))
   }
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return (
-    <form className="register" onSubmit={onSubmit}>
+    <form className="forms" onSubmit={onSubmit}>
+      <h3>Регистрация</h3>
       <input
         type="text"
         name="name"
@@ -52,19 +61,27 @@ const RegisterForm = () => {
         placeholder="Введите имя"
       />
       <input
-        type="text"
+        type="email"
         name="email"
         value={email}
         onChange={onChange}
         placeholder="Введите e-mail"
       />
       <input
-        type="text"
+        type="password"
         name="password"
         value={password}
         onChange={onChange}
         placeholder="Введите пароль"
       />
+      <input
+        type="password"
+        name="confirm_password"
+        value={confirm_password}
+        onChange={onChange}
+        placeholder="Повторите пароль"
+      />
+
       <input type="date" value={birthday} name="birthday" onChange={onChange} />
 
       <select onChange={(e) => setData({ ...data, sex: e.target.value })}>
@@ -82,7 +99,9 @@ const RegisterForm = () => {
         }
         type="file"
       />
-      <button onClick={onSubmit}>Зарегистрировать</button>
+      <button className="auth" onClick={onSubmit}>
+        Зарегистрироваться
+      </button>
     </form>
   )
 }

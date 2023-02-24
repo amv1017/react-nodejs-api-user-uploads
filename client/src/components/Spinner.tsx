@@ -4,7 +4,7 @@ import spinner from '../assets/spinner.gif'
 const Spinner = () => {
   return (
     <div>
-      <img className='spinner' src={spinner} alt="" />
+      <img className="spinner" src={spinner} alt="" />
     </div>
   )
 }

@@ -48,37 +48,37 @@ const EditForm = () => {
   }, [])
 
   return (
-    <>
-      <h1>Редактировать</h1>
-      <form className="register" onSubmit={onSubmit}>
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={onChange}
-          placeholder="Введите имя"
-        />
-        <input
-          type="text"
-          name="password"
-          value={password}
-          onChange={onChange}
-          placeholder="Введите пароль"
-        />
+    <form className="forms" onSubmit={onSubmit}>
+      <h3>Редактировать</h3>
+      <input
+        type="text"
+        name="name"
+        value={name}
+        onChange={onChange}
+        placeholder="Введите имя"
+      />
+      <input
+        type="text"
+        name="password"
+        value={password}
+        onChange={onChange}
+        placeholder="Введите пароль"
+      />
 
-        <input
-          multiple
-          onChange={(e: any) =>
-            setData({
-              ...data,
-              image: e.target.files[0],
-            })
-          }
-          type="file"
-        />
-        <button onClick={onSubmit}>Сохранить</button>
-      </form>
-    </>
+      <input
+        multiple
+        onChange={(e: any) =>
+          setData({
+            ...data,
+            image: e.target.files[0],
+          })
+        }
+        type="file"
+      />
+      <button className="auth" onClick={onSubmit}>
+        Сохранить
+      </button>
+    </form>
   )
 }
 
