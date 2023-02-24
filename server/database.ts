@@ -5,7 +5,7 @@ dotenv.config({ path: '../.env' })
 
 const data = [
   {
-    name: 'james',
+    name: 'James',
     email: 'james@mail.com',
     password: '1234',
     image: 'uploads\\james.jpg',
@@ -13,7 +13,7 @@ const data = [
     birthday: new Date('1996-04-05'),
   },
   {
-    name: 'frank',
+    name: 'Frank',
     email: 'frank@mail.com',
     password: '5678',
     image: 'uploads\\frank.jpg',
@@ -21,7 +21,7 @@ const data = [
     birthday: new Date('1985-02-03'),
   },
   {
-    name: 'amily',
+    name: 'Amily',
     email: 'amily@mail.com',
     password: '90ab',
     image: 'uploads\\amily.jpg',

@@ -6,8 +6,6 @@ export const getAllUsers = async (req: any, res: any) => {
   res.status(200).json(users)
 }
 
-// ------------------------------------------------------------
-
 export const registerUser = async (req: any, res: any) => {
   const { name, email, password, sex, birthday } = req.body
   const { path: image } = req.file
@@ -16,8 +14,6 @@ export const registerUser = async (req: any, res: any) => {
     res.status(400)
     throw new Error('No user data')
   }
-
-  // console.log('REQUEST.BODY : ', req.body)
 
   const userExists = await UserSchema.findOne({ email })
   if (userExists) {
@@ -49,8 +45,6 @@ export const registerUser = async (req: any, res: any) => {
   }
 }
 
-// ------------------------------------------------------------
-
 export const loginUser = async (req: any, res: any) => {
   const { email, password } = req.body
   const user = await UserSchema.findOne({ email })
@@ -64,5 +58,28 @@ export const loginUser = async (req: any, res: any) => {
   } else {
     res.status(400)
     throw new Error('Incorrect email or password')
+  }
+}
+
+export const editUser = async (req: any, res: any) => {
+  const id = req.params.id
+  const user = await UserSchema.findById(id)
+
+  if (!user) {
+    res.status(400)
+    throw new Error('User not found')
+  }
+
+  const { path: image } = req.file
+
+  const updated = await UserSchema.findByIdAndUpdate(id, { ...req.body, image })
+
+  if (updated) {
+    res.status(200).json({
+      id,
+    })
+  } else {
+    res.status(400)
+    throw new Error('User not updated')
   }
 }

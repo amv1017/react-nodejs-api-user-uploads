@@ -8,6 +8,7 @@ import {
   getAllUsers,
   loginUser,
   registerUser,
+  editUser,
 } from './controller/userController'
 
 dotenv.config({ path: '../.env' })
@@ -32,6 +33,8 @@ app.post(
   upload.single('image'),
   expressAsyncHandler(registerUser)
 )
+
+app.put('/api/users/:id', upload.single('image'), expressAsyncHandler(editUser))
 
 app.post('/api/login', expressAsyncHandler(loginUser))
 

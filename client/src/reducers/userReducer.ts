@@ -4,22 +4,28 @@ import { removeLocalData, setLocalData } from '../util'
 const API_URL = import.meta.env.VITE_API_URL
 
 const GET_USERS = 'GET_USERS'
+const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS'
+const GET_USERS_FAILED = 'GET_USERS_FAILED'
+
 const REGISTER_USER = 'REGISTER_USER'
 const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
 const REGISTER_FAILED = 'REGISTER_FAILED'
+
 const LOGIN_USER = 'LOGIN_USER'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGIN_FAILED = 'LOGIN_FAILED'
+
+const SET_REGISTER_MODE = 'SET_REGISTER_MODE'
 
 export const getUsers = (): any => {
   return async (dispatch: any) => {
     dispatch({ type: GET_USERS })
     const response = await axios.get(API_URL + '/users')
     if (response) {
-      dispatch({ type: 'GET_USERS_COMPLETED', payload: response.data })
+      dispatch({ type: GET_USERS_SUCCESS, payload: response.data })
     }
     if (!response) {
-      dispatch({ type: 'GET_USERS_FAILED' })
+      dispatch({ type: GET_USERS_FAILED })
     }
   }
 }
@@ -35,22 +41,26 @@ export const setRegisterMode = (payload: boolean): any => {
 
 export const registerUser = (payload: any): any => {
   return async (dispatch: any) => {
-    dispatch({ type: 'REGISTER_USER' })
+    dispatch({ type: REGISTER_USER })
 
-    const response = await axios.post(API_URL + '/users', payload)
+    const res = await axios.post(API_URL + '/users', payload)
 
-    if (response) {
-      dispatch({ type: 'GET_USERS_COMPLETED', payload: response.data })
+    if (res) {
+      dispatch({ type: REGISTER_SUCCESS, payload: res.data })
     }
-    if (!response) {
-      dispatch({ type: 'GET_USERS_FAILED' })
+    if (!res) {
+      dispatch({ type: REGISTER_FAILED })
     }
   }
 }
 
-export const editUser = (payload: any): any => {
+export const editProfile = (payload: any): any => {
   return async (dispatch: any) => {
-    dispatch({ type: 'EDIT_USER' })
+    dispatch({ type: 'EDIT_PROFILE' })
+
+    const { data, id } = payload
+
+    const res = await axios.put(API_URL + `/users/${id}`, data)
   }
 }
 
@@ -82,54 +92,58 @@ const userReducer = (
   },
   action: any
 ): any => {
-  if (action.type === LOGIN_SUCCESS) {
-    return {
-      ...state,
-      isLoading: false,
-      isError: false,
-      userData: action.payload,
+  switch (action.type) {
+    case LOGIN_USER:
+    case REGISTER_USER:
+    case GET_USERS: {
+      return {
+        isLoading: true,
+      }
     }
-  }
 
-  if (action.type === GET_USERS) {
-    return {
-      isLoading: true,
+    case LOGIN_SUCCESS:
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        userData: action.payload,
+      }
+
+    case LOGIN_FAILED:
+    case REGISTER_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        userData: null,
+      }
+
+    case GET_USERS_SUCCESS: {
+      return {
+        isLoading: false,
+        isError: false,
+        users: action.payload,
+      }
     }
-  }
 
-  if (action.type === 'GET_USERS_COMPLETED') {
-    return {
-      isLoading: false,
-      users: action.payload,
+    case GET_USERS_FAILED: {
+      return {
+        isLoading: false,
+        isError: true,
+        users: [],
+      }
     }
-  }
 
-  if (action.type === 'GET_USERS_FAILED') {
-    return {
-      isLoading: false,
-      users: [],
+    case SET_REGISTER_MODE: {
+      return {
+        isRegisterMode: action.payload,
+      }
     }
-  }
 
-  if (action.type === 'SET_REGISTER_MODE') {
-    return {
-      isRegisterMode: action.payload,
-    }
+    default:
+      return state
   }
-
-  if (action.type === 'REGISTER_USER') {
-    return {
-      isLoading: true,
-    }
-  }
-
-  if (action.type === 'LOGIN_USER') {
-    return {
-      isLoading: true,
-    }
-  }
-
-  return state
 }
 
 export default userReducer

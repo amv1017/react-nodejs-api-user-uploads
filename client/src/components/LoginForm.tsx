@@ -6,7 +6,6 @@ import { getLocalData, setLocalData } from '../util'
 
 const LoginForm = () => {
   const userData = useSelector((state: any) => state.userData)
-  
 
   const dispatch = useDispatch()
   const navigate = useNavigate()

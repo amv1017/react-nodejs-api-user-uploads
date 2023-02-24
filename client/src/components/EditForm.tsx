@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { registerUser } from '../reducers/userReducer'
+import { editProfile } from '../reducers/userReducer'
 import { _CONST_MALE, _CONST_FEMALE } from '../constants'
+import { getLocalData } from '../util'
+import { useNavigate } from 'react-router-dom'
 
 const EditForm = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const [data, setData] = useState({
@@ -25,16 +28,24 @@ const EditForm = () => {
     e.preventDefault()
 
     const formData = new FormData()
-    formData.append('name', name)    
+    formData.append('name', name)
     formData.append('password', password)
     formData.append('image', image)
 
-    dispatch(registerUser(formData))
+    dispatch(
+      editProfile({
+        id: getLocalData().id,
+        data: formData,
+      })
+    )
   }
 
   useEffect(() => {
-    console.log(data)
-  }, [data])
+    const localData = getLocalData()
+    if (!localData) {
+      navigate('/')
+    }
+  }, [])
 
   return (
     <>
@@ -54,7 +65,7 @@ const EditForm = () => {
           onChange={onChange}
           placeholder="Введите пароль"
         />
-        
+
         <input
           multiple
           onChange={(e: any) =>
